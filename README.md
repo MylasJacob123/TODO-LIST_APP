@@ -36,7 +36,7 @@ A simple, user-friendly To-Do List application that allows users to register, lo
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/MylasJacob123/To-Do-List-Application
+git clone https://github.com/MylasJacob123/TODO-LIST_APP
 cd todo-app
 
 ### 2. Install Dependencies
