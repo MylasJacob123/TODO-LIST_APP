@@ -1,0 +1,82 @@
+.home-display {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: #caf0f8; 
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.home-heading {
+    text-align: center;
+    color: #03045e; 
+    font-family: 'Arial', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #00b4d8; 
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0077b6; 
+    color: #ffffff;
+}
+
+input[type="text"], select {
+    padding: 0.75rem;
+    width: 100%;
+    border: 1px solid #90e0ef;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #03045e;
+    background-color: #f0f8ff;
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: #0077b6; 
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .home-display {
+        padding: 1.5rem;
+    }
+
+    .home-heading {
+        font-size: 1.8rem;
+    }
+
+    button {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-display {
+        padding: 1rem;
+        width: 95%;
+    }
+
+    .home-heading {
+        font-size: 1.5rem;
+    }
+
+    button {
+        font-size: 0.85rem;
+    }
+}
