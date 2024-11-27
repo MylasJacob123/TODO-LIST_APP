@@ -7,17 +7,19 @@ import axios from "axios";
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
 
+  const userId = 1; // Hardcoded userId
+
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/tasks");
+        const response = await axios.get(`http://localhost:8000/users/${userId}/tasks`); // Fetch tasks for the specific user
         setTodos(response.data);
       } catch (error) {
         console.error("Error fetching tasks", error);
       }
     };
     fetchTodos();
-  }, []);
+  }, [userId]); // Add userId to the dependency array to fetch data again if the userId changes
 
   const addTodo = (newTodo) => {
     setTodos([...todos, newTodo]);

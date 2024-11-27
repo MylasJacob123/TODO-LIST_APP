@@ -1,45 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Profile.css";
 
 function UserProfile() {
-  const user = {
-    email: "johndoe@example.com",
-    username: "John Doe",
-  };
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const tasks = [
-    { id: 1, title: "Complete project report", priority: "High" },
-    { id: 2, title: "Read new articles on React", priority: "Medium" },
-    { id: 3, title: "Plan weekend getaway", priority: "Low" },
-    { id: 4, title: "Finish module exercises", priority: "High" },
-  ];
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userId = storedUser ? storedUser.userId : null;
 
-  const sortedTasks = [...tasks].sort((a, b) => {
-    const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-    return priorityOrder[a.priority] - priorityOrder[b.priority];
-  });
+  useEffect(() => {
+    if (userId) {
+      console.log("Fetching user from API with userId:", userId);
+      
+      axios
+        .get(`http://localhost:8000/users/${userId}`)
+        .then((response) => {
+          console.log("API Response:", response.data);
+          setUser(response.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+          setLoading(false); 
+        });
+    } else {
+      console.error("No userId found in localStorage");
+      setLoading(false); 
+    }
+  }, [userId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div>No user data found</div>;
+  }
 
   return (
     <div className="profile-container">
       <div className="profile-card-wrapper">
         <div className="profile-card">
-          <h2 className="profile-username">{user.username}</h2>
+          <h2 className="profile-username">Username: {user.name}</h2>
           <p className="profile-email">
             <strong>Email:</strong> {user.email}
           </p>
-
-          <h3 className="task-title">Tasks by Priority</h3>
-          <ul className="task-list">
-            {sortedTasks.map((task) => (
-              <li
-                key={task.id}
-                className={`task-item priority-${task.priority.toLowerCase()}`}
-              >
-                <span className="task-title">{task.title}</span>
-                <span className="task-priority">{task.priority}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>

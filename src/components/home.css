@@ -80,3 +80,10 @@ input[type="text"]:focus, select:focus {
         font-size: 0.85rem;
     }
 }
+
+.no-tasks {
+    text-align: center;
+    color: #0077b6;
+    margin-top: 20px;
+    font-size: 1.2rem;
+  }

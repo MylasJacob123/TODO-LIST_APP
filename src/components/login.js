@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../components/login.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import Alert from "@mui/material/Alert";
 
 function Login({ setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
-    
+
     if (!email) {
       newErrors.email = "Email is required";
     }
-    
+
     if (!password) {
       newErrors.password = "Password is required";
     }
@@ -27,19 +28,42 @@ function Login({ setUser }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted with values:", { email, password });
+
     if (validate()) {
       try {
-        const response = await axios.post('http://localhost:8000/users/login', { email, password });
-        console.log("Login successful:", response.data);
+        console.log("Sending login request...");
+        const response = await axios.post("http://localhost:8000/users/login", {
+          email,
+          password,
+        });
 
-        console.log("User ID:", response.data.userId);
+        console.log("API Response:", response.data);
 
-        localStorage.setItem('user', JSON.stringify(response.data));
-        setUser(response.data); 
-        navigate('/home');
+        // Save user to localStorage
+        localStorage.setItem("user", JSON.stringify(response.data));
+        console.log("User saved to localStorage:", localStorage.getItem("user"));
+
+        // Update the global user state
+        setUser(response.data);
+        console.log("User state updated:", response.data);
+
+        // Show success message
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: `Welcome back!`,
+        });
+
+        // Navigate to the home page
+        navigate("/home");
       } catch (error) {
-        console.error("Login error:", error.response ? error.response.data : error.message);
-        setLoginError("Invalid email or password.");
+        console.error("Login error:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: "Invalid email or password. Please try again.",
+        });
       }
     }
   };
@@ -49,8 +73,10 @@ function Login({ setUser }) {
       <h1 className="heading">Login</h1>
       <form className="form" onSubmit={handleSubmit}>
         <div>
-          <label className="log-label" htmlFor="email">Email</label>
-          <input 
+          <label className="log-label" htmlFor="email">
+            Email
+          </label>
+          <input
             className="log-input"
             type="text"
             name="email"
@@ -59,12 +85,18 @@ function Login({ setUser }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {errors.email && <p className="error">{errors.email}</p>}
+          {errors.email && (
+            <Alert severity="error" className="error-message">
+              {errors.email}
+            </Alert>
+          )}
         </div>
 
         <div>
-          <label className="log-label" htmlFor="password">Password</label>
-          <input 
+          <label className="log-label" htmlFor="password">
+            Password
+          </label>
+          <input
             className="log-input"
             type="password"
             name="password"
@@ -73,12 +105,16 @@ function Login({ setUser }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && <p className="error">{errors.password}</p>}
+          {errors.password && (
+            <Alert severity="error" className="error-message">
+              {errors.password}
+            </Alert>
+          )}
         </div>
 
-        {loginError && <p className="error">{loginError}</p>}
-
-        <button className="login-btn" type="submit">Login</button>
+        <button className="login-btn" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
